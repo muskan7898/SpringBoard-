@@ -1,9 +1,12 @@
 package com.example.Spring_Board.controller;
 
+import com.example.Spring_Board.Dto.res.VehicleDetail;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -13,5 +16,31 @@ public class VehicleController {
     public String insertVehicle(){
         return "";
     }
+
+    @PutMapping("/update-status")
+    public String updateVehicleStatus(){
+        return "";
+    }
+
+    @GetMapping("/get-all")
+    public ResponseEntity<List<VehicleDetail>> getAllVehicle(){
+        return null;
+    }
+
+    @GetMapping("/get-available-vehicle")
+    public ResponseEntity<List<VehicleDetail>> getAvailableVehicle(){
+        return null;
+    }
+
+    @GetMapping("/getById/{Id}")
+    public VehicleDetail getVehicleById(@PathVariable String Id){
+        return null;
+    }
+
+    @DeleteMapping("/delete/{Id}")
+    public String deleteVehicleById(@PathVariable String Id){
+        return null;
+    }
+
 
 }
