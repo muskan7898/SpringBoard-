@@ -1,8 +1,12 @@
 package com.example.spring.board.controller;
 
+import com.example.spring.board.dto.res.MaintenanceScheduleDetail;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -14,6 +18,7 @@ public class MaintenanceScheduleController {
         return "";
     }
 
+
     @PutMapping("/update-schedule/{vehicleId}")
     public String updateMaintenanceById(@PathVariable String vehicleId){
         return "";
@@ -24,5 +29,17 @@ public class MaintenanceScheduleController {
         return "";
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MaintenanceScheduleDetail> getMaintenanceScheduleById(@PathVariable Long id) {
+//        return ResponseEntity.ok(maintenanceScheduleService.getMaintenanceScheduleById(id));
+        return null;
+    }
+
+    @GetMapping("/by-vehicle/{vehicleId}")
+    public List<MaintenanceScheduleDetail> getSchedulesByVehicle(@PathVariable Long vehicleId) {
+//        return maintenanceScheduleService.getSchedulesByVehicle(vehicleId);
+        return null;
+    }
 
 }

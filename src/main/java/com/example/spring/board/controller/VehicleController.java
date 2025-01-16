@@ -1,5 +1,6 @@
 package com.example.spring.board.controller;
 
+import com.example.spring.board.dto.req.UpdateVehicleStatus;
 import com.example.spring.board.dto.res.VehicleDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,12 @@ import java.util.List;
 @RequestMapping("/vehicle")
 public class VehicleController {
     @PostMapping("/create")
-    public String insertVehicle(){
+    public String insertVehicle(@RequestBody VehicleDetail vehicleDetail){
         return "";
     }
 
     @PutMapping("/update-status")
-    public String updateVehicleStatus(){
+    public String updateVehicleStatus(@RequestBody UpdateVehicleStatus updateVehicleStatus){
         return "";
     }
 
@@ -42,5 +43,9 @@ public class VehicleController {
         return null;
     }
 
+    @GetMapping("/by-status/{status}")
+    public List<VehicleDetail> getVehiclesByStatus(@PathVariable String status) {
+        return null;
+    }
 
 }
