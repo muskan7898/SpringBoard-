@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -13,7 +14,7 @@ import java.util.List;
 @RequestMapping("/vehicle-type")
 public class VehicleTypeController {
     @PostMapping("/create")
-    public String insertVehicleType(@RequestBody VehicleTypeDetail vehicleTypeDetail){
+    public String insertVehicleType(@RequestBody @Valid VehicleTypeDetail vehicleTypeDetail){
         return "";
     }
 

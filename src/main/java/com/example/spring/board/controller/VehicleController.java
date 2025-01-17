@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -19,7 +20,7 @@ public class VehicleController {
     }
 
     @PutMapping("/update-status")
-    public String updateVehicleStatus(@RequestBody UpdateVehicleStatus updateVehicleStatus){
+    public String updateVehicleStatus(@RequestBody @Valid UpdateVehicleStatus updateVehicleStatus){
         return "";
     }
 

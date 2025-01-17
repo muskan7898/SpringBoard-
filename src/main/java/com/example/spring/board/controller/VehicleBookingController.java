@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/vehicle-booking")
 public class VehicleBookingController {
     @PostMapping("/create")
-    public String insertVehicleBooking(@RequestBody VehicleBookingDetail vehicleBookingDetail){
+    public String insertVehicleBooking(@RequestBody @Valid VehicleBookingDetail vehicleBookingDetail){
         return "";
     }
 
