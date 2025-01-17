@@ -1,6 +1,6 @@
 package com.example.spring.board.model;
 
-import com.example.spring.board.general.VehicleStatus;
+import com.example.spring.board.enums.VehicleStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +21,7 @@ public class Vehicle {
     private int manufactureYear;
 
 //    available, booked, maintenance
+    @Enumerated(EnumType.STRING)
     private VehicleStatus status;
 
     @Column(nullable = false)

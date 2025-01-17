@@ -1,5 +1,6 @@
 package com.example.spring.board.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,9 @@ public class MaintenanceSchedule {
     @Column(nullable = false)
     private Long vehicleId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date serviceDate;
+
     private String serviceDetail;
 
 }

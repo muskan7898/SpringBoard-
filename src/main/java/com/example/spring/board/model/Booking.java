@@ -1,5 +1,6 @@
 package com.example.spring.board.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,10 @@ public class Booking {
     private Long id;
 
     @Column(nullable = false)
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updatedDate;
 }

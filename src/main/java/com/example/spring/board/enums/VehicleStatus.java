@@ -1,4 +1,4 @@
-package com.example.spring.board.general;
+package com.example.spring.board.enums;
 
 public enum VehicleStatus {
     AVAILABLE,
