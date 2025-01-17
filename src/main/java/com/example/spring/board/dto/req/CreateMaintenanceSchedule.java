@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class CreateMaintenanceSchedule {
-    private Long VehicleId;
+    private Long vehicleId;
     private String serviceDate;
     private String serviceDetail;
 }

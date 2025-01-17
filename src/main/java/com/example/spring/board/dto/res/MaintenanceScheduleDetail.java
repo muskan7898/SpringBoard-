@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MaintenanceScheduleDetail {
-    private Long Id;
+    private Long id;
     private Long vehicleId;
     private String serviceDate;
     private String serviceDetail;

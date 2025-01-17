@@ -1,5 +1,6 @@
 package com.example.spring.board.dto.req;
 
+import com.example.spring.board.general.VehicleStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,6 @@ import lombok.NoArgsConstructor;
 public class CreateVehicle {
     private String model;
     private int manufactureYear;
-    private String status;
+    private VehicleStatus status;
     private Long typeId;
 }

@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateBooking {
-    private String startDate;
-    private String endDate;
+    private Date startDate;
+    private Date endDate;
 }
 
 
