@@ -3,12 +3,13 @@ package com.example.spring.board.controller;
 
 import com.example.spring.board.dto.res.BookingDetail;
 import com.example.spring.board.services.BookingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+
 import java.util.List;
 
 @Controller

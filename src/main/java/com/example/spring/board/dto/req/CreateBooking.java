@@ -10,6 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateBooking {
+
     private Date startDate;
     private Date endDate;
 }

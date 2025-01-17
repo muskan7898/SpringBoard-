@@ -2,12 +2,13 @@ package com.example.spring.board.controller;
 
 import com.example.spring.board.dto.req.UpdateVehicleStatus;
 import com.example.spring.board.dto.res.VehicleDetail;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+
 import java.util.List;
 
 @Controller
