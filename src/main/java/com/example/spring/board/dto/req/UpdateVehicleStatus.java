@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateVehicleStatus {
+    @NotNull(message = "id cannot be null")
     private Long id;
 
     @NotNull(message = "vehicle status should not be null")
-    @Enumerated(EnumType.STRING)
     private VehicleStatus newStatus;
 }
 

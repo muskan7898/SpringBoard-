@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateVehicleMaintenanceSchedule {
+
     @NotNull(message = "service detail should have to provide")
     private String serviceDetail;
 }
