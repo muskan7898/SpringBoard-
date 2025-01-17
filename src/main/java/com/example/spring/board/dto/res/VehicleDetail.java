@@ -15,3 +15,5 @@ public class VehicleDetail {
     private String typeName;
 }
 
+
+

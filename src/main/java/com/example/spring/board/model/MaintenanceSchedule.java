@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -19,7 +21,7 @@ public class MaintenanceSchedule {
     @Column(nullable = false)
     private Long vehicleId;
 
-    private String serviceDate;
+    private Date serviceDate;
     private String serviceDetail;
 
 }

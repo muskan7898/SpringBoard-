@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +19,6 @@ public class Booking {
     private Long id;
 
     @Column(nullable = false)
-    private String startDate;
-    private String updatedDate;
+    private Date startDate;
+    private Date updatedDate;
 }
