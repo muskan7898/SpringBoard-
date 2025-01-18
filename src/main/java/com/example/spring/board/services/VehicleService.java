@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VehicleService {
 
-    private VehicleRepository vehicleRepository;
+    private final VehicleRepository vehicleRepository;
 
     public Vehicle saveVehicle(Vehicle vehicle){
         return null;
