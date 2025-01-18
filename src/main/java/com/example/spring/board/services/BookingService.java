@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.awt.print.Book;
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class BookingService {
@@ -32,6 +33,5 @@ public class BookingService {
     public Booking getBookingByVehicleId(Long VehicleId){
         return null;
     }
-
 }
 
