@@ -15,15 +15,18 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
 
     public Vehicle saveVehicle(Vehicle vehicle){
-        return null;
+        return vehicleRepository.save(vehicle);
     }
 
     public List<Vehicle> getAllVehicle(){
-        return null;
+        return vehicleRepository.findAll();
     }
 
     public Vehicle updateVehicleStatus(Long id, Vehicle updatedVehicle){
-        return null;
+        Vehicle existingVehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vehicle not found with ID: " + id));
+        existingVehicle.setStatus(updatedVehicle.getStatus());
+        return vehicleRepository.save(existingVehicle);
     }
 
     public List<Vehicle> getAvailableVehicle(){
@@ -31,11 +34,18 @@ public class VehicleService {
     }
 
     public Vehicle getVehicleById(Long id){
-        return null;
+        Vehicle vehicle = vehicleRepository.findById(id).orElse(null);
+        if(vehicle == null){
+            return null;
+        }
+        return vehicle;
     }
 
     public void deleteVehicle(Long id){
-
+        if (!vehicleRepository.existsById(id)) {
+            throw new RuntimeException("Vehicle not found with ID: " + id);
+        }
+        vehicleRepository.deleteById(id);
     }
 
     public List<Vehicle> getVehicleByStatus(String status){

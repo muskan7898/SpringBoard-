@@ -12,7 +12,7 @@ public class VehicleBookingService {
     private final VehicleBookingRepository vehicleBookingRepository;
 
     public VehicleBooking saveVehicleBooking(VehicleBooking vehicleBooking){
-        return null;
+        return vehicleBookingRepository.save(vehicleBooking);
     }
 
 }

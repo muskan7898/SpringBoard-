@@ -13,16 +13,24 @@ public class MaintenanceScheduleService {
     private final MaintenanceScheduleRepository maintenanceScheduleRepository;
 
     public MaintenanceSchedule savaSchedule(MaintenanceSchedule schedule){
-        return null;
+        return maintenanceScheduleRepository.save(schedule);
     }
 
-    public MaintenanceSchedule updateByVehicleId(Long vehicleId, MaintenanceSchedule updatedSchedule){
-        return null;
+    public MaintenanceSchedule updateById(Long id, MaintenanceSchedule updatedSchedule){
+        MaintenanceSchedule existingSchedule = maintenanceScheduleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Maintenance schedule not found for ID: " + id));
+
+        existingSchedule.setServiceDate(updatedSchedule.getServiceDate());
+        existingSchedule.setServiceDetail(updatedSchedule.getServiceDetail());
+        return maintenanceScheduleRepository.save(existingSchedule);
     }
 
-    public void deleteByVehicleId(Long vehicleId){
-
+    public void deleteById(Long id){
+        MaintenanceSchedule existingSchedule = maintenanceScheduleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Maintenance schedule not found for ID: " + id));
+        maintenanceScheduleRepository.delete(existingSchedule);
     }
+
     public List<MaintenanceSchedule> getByVehicleId(Long vehicleId){
         return null;
     }
