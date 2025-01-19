@@ -2,7 +2,7 @@ package com.example.spring.board.controller;
 
 
 import com.example.spring.board.dto.res.BookingDetail;
-import com.example.spring.board.services.BookingService;
+import com.example.spring.board.services.core.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.example.spring.board.services;
+package com.example.spring.board.services.core;
 
 import com.example.spring.board.model.VehicleBooking;
 import com.example.spring.board.repository.VehicleBookingRepository;
@@ -12,7 +12,10 @@ public class VehicleBookingService {
     private final VehicleBookingRepository vehicleBookingRepository;
 
     public VehicleBooking saveVehicleBooking(VehicleBooking vehicleBooking){
-        return vehicleBookingRepository.save(vehicleBooking);
+        try {
+            return vehicleBookingRepository.save(vehicleBooking);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-
 }
