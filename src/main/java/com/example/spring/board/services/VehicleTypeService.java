@@ -4,11 +4,13 @@ import com.example.spring.board.dto.res.VehicleTypeDetail;
 import com.example.spring.board.model.VehicleType;
 import com.example.spring.board.services.core.VehicleTypeCoreService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class VehicleTypeService {
     private VehicleTypeCoreService vehicleTypeCoreService;
 

@@ -1,5 +1,6 @@
 package com.example.spring.board.services.core;
 
+import com.example.spring.board.enums.VehicleStatus;
 import com.example.spring.board.model.Vehicle;
 import com.example.spring.board.repository.VehicleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,7 +35,7 @@ public class VehicleCoreService {
 
     public List<Vehicle> getAvailableVehicle(){
         try {
-            return vehicleRepository.findAllAvailable("Available");
+            return vehicleRepository.findAllByStatus(VehicleStatus.AVAILABLE);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -63,7 +64,7 @@ public class VehicleCoreService {
         }
     }
 
-    public List<Vehicle> getVehicleByStatus(Enum status){
+    public List<Vehicle> getVehicleByStatus(VehicleStatus status){
         try {
             return vehicleRepository.findAllByStatus(status);
         } catch (Exception e) {

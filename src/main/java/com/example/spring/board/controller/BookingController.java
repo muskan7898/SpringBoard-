@@ -41,9 +41,8 @@ public class BookingController {
         bookingService.deleteBookingByIdService(id);
     }
 
-    @GetMapping("/by-vehicle/{vehicleId}")
-    public BookingDetail getBookingsByVehicle(@PathVariable Long vehicleId) {
-        return bookingService.getBookingByVehicleIdService(vehicleId);
-    }
-
+//    @GetMapping("/by-vehicle/{vehicleId}")
+//    public BookingDetail getBookingsByVehicle(@PathVariable Long vehicleId) {
+//        return bookingService.getBookingByVehicleIdService(vehicleId);
+//    }
 }

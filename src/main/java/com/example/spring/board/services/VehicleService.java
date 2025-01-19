@@ -3,21 +3,26 @@ package com.example.spring.board.services;
 import com.example.spring.board.dto.req.CreateVehicle;
 import com.example.spring.board.dto.req.UpdateVehicleStatus;
 import com.example.spring.board.dto.res.VehicleDetail;
+import com.example.spring.board.enums.VehicleStatus;
 import com.example.spring.board.model.Vehicle;
 import com.example.spring.board.model.VehicleType;
 import com.example.spring.board.services.core.VehicleCoreService;
 import com.example.spring.board.services.core.VehicleTypeCoreService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class VehicleService {
 
-    private VehicleCoreService vehicleCoreService;
-    private VehicleTypeCoreService vehicleTypeCoreService;
+    private final VehicleCoreService vehicleCoreService;
+    private final VehicleTypeCoreService vehicleTypeCoreService;
 
     public String insertVehicleService(@RequestBody CreateVehicle createVehicle){
         Vehicle vehicle = new Vehicle();
@@ -98,7 +103,7 @@ public class VehicleService {
         vehicleCoreService.deleteVehicle(id);
     }
 
-    public ResponseEntity<List<VehicleDetail>> getVehicleByStatusService(Enum status){
+    public ResponseEntity<List<VehicleDetail>> getVehicleByStatusService(VehicleStatus status){
         List<Vehicle> vehicles = vehicleCoreService.getVehicleByStatus(status);
         List<VehicleDetail> vehicleDetails = new ArrayList<>();
 

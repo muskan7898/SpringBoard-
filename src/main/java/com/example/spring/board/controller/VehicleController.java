@@ -3,6 +3,7 @@ package com.example.spring.board.controller;
 import com.example.spring.board.dto.req.CreateVehicle;
 import com.example.spring.board.dto.req.UpdateVehicleStatus;
 import com.example.spring.board.dto.res.VehicleDetail;
+import com.example.spring.board.enums.VehicleStatus;
 import com.example.spring.board.services.VehicleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,9 @@ import java.util.List;
 public class VehicleController {
     private final VehicleService vehicleService;
     @PostMapping("/create")
-    public String insertVehicle(@RequestBody CreateVehicle createVehicle){
-        return vehicleService.insertVehicleService(createVehicle);
+    public ResponseEntity<String> insertVehicle(@RequestBody CreateVehicle createVehicle){
+//        return vehicleService.insertVehicleService(createVehicle);
+        return ResponseEntity.ok(vehicleService.insertVehicleService(createVehicle));
     }
 
     @PutMapping("/update-status/{id}")
@@ -49,7 +51,7 @@ public class VehicleController {
     }
 
     @GetMapping("/by-status/{status}")
-    public ResponseEntity<List<VehicleDetail>> getVehiclesByStatus(@PathVariable Enum status) {
+    public ResponseEntity<List<VehicleDetail>> getVehiclesByStatus(@PathVariable VehicleStatus status) {
         return vehicleService.getVehicleByStatusService(status);
     }
 

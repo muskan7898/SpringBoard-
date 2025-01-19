@@ -5,11 +5,13 @@ import com.example.spring.board.dto.res.BookingDetail;
 import com.example.spring.board.model.Booking;
 import com.example.spring.board.services.core.BookingCoreService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class BookingService {
     private BookingCoreService bookingCoreService;
 
@@ -42,11 +44,11 @@ public class BookingService {
         bookingCoreService.deleteBookingById(id);
     }
 
-    public BookingDetail getBookingByVehicleIdService(Long vehicleId){
-        Booking booking = bookingCoreService.getBookingByVehicleId(vehicleId);
-        BookingDetail bookingDetail = new BookingDetail();
-        // complete this
-        return bookingDetail;
-    }
+//    public BookingDetail getBookingByVehicleIdService(Long vehicleId){
+//        Booking booking = bookingCoreService.getBookingByVehicleId(vehicleId);
+//        BookingDetail bookingDetail = new BookingDetail();
+//        // complete this
+//        return bookingDetail;
+//    }
 
 }
