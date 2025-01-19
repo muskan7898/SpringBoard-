@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class VehicleBookingService {
+public class VehicleBookingCoreService {
 
     private final VehicleBookingRepository vehicleBookingRepository;
 

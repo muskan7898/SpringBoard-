@@ -1,8 +1,10 @@
 package com.example.spring.board.controller;
 
 
+import com.example.spring.board.dto.req.CreateBooking;
 import com.example.spring.board.dto.res.BookingDetail;
-import com.example.spring.board.services.core.BookingService;
+import com.example.spring.board.services.BookingService;
+import com.example.spring.board.services.core.BookingCoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,29 +21,29 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/create")
-    public String insertBooking(@RequestBody @Valid BookingDetail bookingDetail){
-        return "";
+    public String insertBooking(@RequestBody @Valid CreateBooking createBooking){
+        return bookingService.insertBookingService(createBooking);
     }
 
     @GetMapping("/get-all")
     public ResponseEntity<List<BookingDetail>> getAllBooking(){
-        return null;
+        return bookingService.getAllBookingService();
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<BookingDetail> getBookingById(@PathVariable Long id) {
-        return null;
+        return bookingService.getBookingByIdService(id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
-        return null;
+    public void deleteBooking(@PathVariable Long id) {
+        bookingService.deleteBookingByIdService(id);
     }
 
     @GetMapping("/by-vehicle/{vehicleId}")
-    public List<BookingDetail> getBookingsByVehicle(@PathVariable Long vehicleId) {
-        return null;
+    public BookingDetail getBookingsByVehicle(@PathVariable Long vehicleId) {
+        return bookingService.getBookingByVehicleIdService(vehicleId);
     }
 
 }

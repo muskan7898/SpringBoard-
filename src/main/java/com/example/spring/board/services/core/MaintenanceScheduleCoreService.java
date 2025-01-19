@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class MaintenanceScheduleService {
+public class MaintenanceScheduleCoreService {
     private final MaintenanceScheduleRepository maintenanceScheduleRepository;
 
     public MaintenanceSchedule saveSchedule(MaintenanceSchedule schedule){

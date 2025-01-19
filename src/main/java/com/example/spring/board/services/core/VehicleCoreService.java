@@ -6,12 +6,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VehicleService {
+public class VehicleCoreService {
 
     private final VehicleRepository vehicleRepository;
 
@@ -32,16 +31,6 @@ public class VehicleService {
         }
     }
 
-    public Vehicle updateVehicleStatus(Long id, Vehicle updatedVehicle){
-        try{
-            Vehicle existingVehicle = vehicleRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Vehicle not found with ID: " + id));
-            existingVehicle.setStatus(updatedVehicle.getStatus());
-            return vehicleRepository.save(existingVehicle);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public List<Vehicle> getAvailableVehicle(){
         try {

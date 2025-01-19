@@ -11,10 +11,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VehicleTypeService {
+public class VehicleTypeCoreService {
     private final VehicleTypeRepository vehicleTypeRepository;
 
-    public VehicleType createVehicleType(VehicleType vehicleType){
+    public VehicleType saveVehicleType(VehicleType vehicleType){
         try{
             return vehicleTypeRepository.save(vehicleType);
         } catch (Exception e) {

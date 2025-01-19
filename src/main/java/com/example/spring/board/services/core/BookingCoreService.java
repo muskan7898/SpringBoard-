@@ -2,7 +2,6 @@ package com.example.spring.board.services.core;
 
 import com.example.spring.board.model.Booking;
 import com.example.spring.board.repository.BookingRepository;
-import com.example.spring.board.repository.VehicleTypeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookingService {
+public class BookingCoreService {
     private final BookingRepository bookingRepository;
 
     public Booking saveBooking(Booking booking){

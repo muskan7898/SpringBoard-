@@ -1,6 +1,7 @@
 package com.example.spring.board.controller;
 
 import com.example.spring.board.dto.res.VehicleTypeDetail;
+import com.example.spring.board.services.VehicleTypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/vehicle-type")
 public class VehicleTypeController {
+    private VehicleTypeService vehicleTypeService;
     @PostMapping("/create")
     public String insertVehicleType(@RequestBody @Valid VehicleTypeDetail vehicleTypeDetail){
-        return "";
+        return vehicleTypeService.insertVehicleTypeService(vehicleTypeDetail);
     }
 
     @GetMapping("/{id}")
@@ -25,12 +27,12 @@ public class VehicleTypeController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteVehicleType(@PathVariable Long id) {
-        return null;
+    public void deleteVehicleType(@PathVariable Long id) {
+        vehicleTypeService.deleteVehicleTypeByIdService(id);
     }
 
     @GetMapping("get-all")
-    public List<VehicleTypeDetail> getAllVehicleType(){
-        return null;
+    public ResponseEntity<List<VehicleTypeDetail>> getAllVehicleType(){
+        return vehicleTypeService.getAllVehicleTypeService();
     }
 }
