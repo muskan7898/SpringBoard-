@@ -30,23 +30,23 @@ public class MaintenanceScheduleController {
         return ResponseEntity.ok(maintenanceScheduleService.updateScheduleService(vehicleId, id, updateVehicleMaintenanceSchedule));
     }
 
-    @DeleteMapping("/delete-schedule/{vehicleId}")
-    public ResponseEntity<Void> deleteMaintenanceById(@PathVariable Long vehicleId){
-        maintenanceScheduleService.deleteScheduleByVehicleIdService(vehicleId);
+    //testing is not done for this, having issues
+    @DeleteMapping("/delete-schedule/{vehicleId}/{id}")
+    public ResponseEntity<Void> deleteMaintenanceById(@PathVariable Long vehicleId, @PathVariable Long id){
+        maintenanceScheduleService.deleteScheduleByVehicleIdService(vehicleId, id);
         return ResponseEntity.ok().build();
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<MaintenanceScheduleDetail> getMaintenanceScheduleById(@PathVariable Long id) {
-//        return ResponseEntity.ok(maintenanceScheduleService.getMaintenanceScheduleById(id));
-        return null;
+        return ResponseEntity.ok(maintenanceScheduleService.getScheduleByIdService(id));
     }
 
     @GetMapping("/by-vehicle/{vehicleId}")
-    public List<MaintenanceScheduleDetail> getSchedulesByVehicle(@PathVariable Long vehicleId) {
-//        return maintenanceScheduleService.getSchedulesByVehicle(vehicleId);
-        return null;
+    public ResponseEntity<List<MaintenanceScheduleDetail>> getSchedulesByVehicle(@PathVariable Long vehicleId) {
+         return ResponseEntity.ok(maintenanceScheduleService.getByVehicleIdService(vehicleId));
+
     }
 
 }

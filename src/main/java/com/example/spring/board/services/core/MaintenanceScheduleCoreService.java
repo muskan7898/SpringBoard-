@@ -30,9 +30,12 @@ public class MaintenanceScheduleCoreService {
         }
     }
 
-    public void deleteScheduleByVehicleId(Long vehicleId){
+    public void deleteScheduleByVehicleId(Long vehicleId, Long id){
         try{
-            maintenanceScheduleRepository.deleteByVehicleId(vehicleId);
+            if(maintenanceScheduleRepository.findByIdAndVehicleId(id, vehicleId).isEmpty()){
+                throw  new EntityNotFoundException("schedule does not exist for");
+            }
+            maintenanceScheduleRepository.deleteByIdAndVehicleId(vehicleId, id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -67,6 +70,14 @@ public class MaintenanceScheduleCoreService {
     public List<MaintenanceSchedule> getScheduleByVehicleId(Long vehicleId){
         try{
             return maintenanceScheduleRepository.findAllByVehicleId(vehicleId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public MaintenanceSchedule getScheduleById(Long id){
+        try {
+            return maintenanceScheduleRepository.findById(id).orElse(null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
