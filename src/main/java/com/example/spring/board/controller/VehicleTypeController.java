@@ -15,20 +15,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/vehicle-type")
 public class VehicleTypeController {
-    private VehicleTypeService vehicleTypeService;
+    private final VehicleTypeService vehicleTypeService;
     @PostMapping("/create")
-    public String insertVehicleType(@RequestBody @Valid VehicleTypeDetail vehicleTypeDetail){
-        return vehicleTypeService.insertVehicleTypeService(vehicleTypeDetail);
+    public ResponseEntity<String> insertVehicleType(@RequestBody @Valid VehicleTypeDetail vehicleTypeDetail){
+        return ResponseEntity.ok(vehicleTypeService.insertVehicleTypeService(vehicleTypeDetail));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VehicleTypeDetail> getVehicleTypeById(@PathVariable Long id){
-        return null;
+        return ResponseEntity.ok(vehicleTypeService.getVehicleByIdService(id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteVehicleType(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteVehicleType(@PathVariable Long id) {
         vehicleTypeService.deleteVehicleTypeByIdService(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("get-all")
