@@ -21,13 +21,12 @@ public class VehicleController {
     private final VehicleService vehicleService;
     @PostMapping("/create")
     public ResponseEntity<String> insertVehicle(@RequestBody CreateVehicle createVehicle){
-//        return vehicleService.insertVehicleService(createVehicle);
         return ResponseEntity.ok(vehicleService.insertVehicleService(createVehicle));
     }
 
     @PutMapping("/update-status/{id}")
-    public String updateVehicleStatus(@RequestBody @Valid UpdateVehicleStatus updateVehicleStatus, @PathVariable Long id){
-        return vehicleService.updateVehicleStatusService(updateVehicleStatus, id);
+    public ResponseEntity<String> updateVehicleStatus(@RequestBody @Valid UpdateVehicleStatus updateVehicleStatus, @PathVariable Long id){
+        return ResponseEntity.ok(vehicleService.updateVehicleStatusService(updateVehicleStatus, id));
     }
 
     @GetMapping("/get-all")
@@ -35,19 +34,16 @@ public class VehicleController {
         return vehicleService.getAllVehicleService();
     }
 
-    @GetMapping("/get-available-vehicle")
-    public ResponseEntity<List<VehicleDetail>> getAvailableVehicle(){
-        return null;
-    }
 
     @GetMapping("/getById/{id}")
     public ResponseEntity<VehicleDetail> getVehicleById(@PathVariable Long id){
         return vehicleService.getVehicleByIdService(id);
     }
 
-    @DeleteMapping("/delete/{Id}")
-    public void deleteVehicleById(@PathVariable Long id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteVehicleById(@PathVariable Long id){
         vehicleService.deleteVehicleByService(id);
+        return  ResponseEntity.ok().build();
     }
 
     @GetMapping("/by-status/{status}")

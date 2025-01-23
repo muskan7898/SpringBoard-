@@ -1,6 +1,10 @@
 package com.example.spring.board.controller;
 
+import com.example.spring.board.dto.req.CreateMaintenanceSchedule;
+import com.example.spring.board.dto.req.UpdateVehicleMaintenanceSchedule;
 import com.example.spring.board.dto.res.MaintenanceScheduleDetail;
+import com.example.spring.board.services.MaintenanceScheduleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,20 +17,23 @@ import java.util.List;
 @RequestMapping("/maintenance-schedule")
 public class MaintenanceScheduleController {
 
+    private final MaintenanceScheduleService maintenanceScheduleService;
+
     @PostMapping("/create")
-    public String insertMaintenanceSchedule(){
-        return "";
+    public ResponseEntity<String> insertMaintenanceSchedule(@RequestBody @Valid CreateMaintenanceSchedule createMaintenanceSchedule){
+        return ResponseEntity.ok(maintenanceScheduleService.insertScheduleService(createMaintenanceSchedule));
     }
 
 
-    @PutMapping("/update-schedule/{vehicleId}")
-    public String updateMaintenanceById(@PathVariable String vehicleId){
-        return "";
+    @PutMapping("/update-schedule/{vehicleId}/{id}")
+    public ResponseEntity<String> updateMaintenanceById(@PathVariable Long vehicleId, @PathVariable Long id, @RequestBody UpdateVehicleMaintenanceSchedule updateVehicleMaintenanceSchedule){
+        return ResponseEntity.ok(maintenanceScheduleService.updateScheduleService(vehicleId, id, updateVehicleMaintenanceSchedule));
     }
 
     @DeleteMapping("/delete-schedule/{vehicleId}")
-    public String deleteMaintenanceById(@PathVariable String vehicleId){
-        return "";
+    public ResponseEntity<Void> deleteMaintenanceById(@PathVariable Long vehicleId){
+        maintenanceScheduleService.deleteScheduleByVehicleIdService(vehicleId);
+        return ResponseEntity.ok().build();
     }
 
 

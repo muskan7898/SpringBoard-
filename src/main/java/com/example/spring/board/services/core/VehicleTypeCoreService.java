@@ -34,11 +34,7 @@ public class VehicleTypeCoreService {
 
     public VehicleType getVehicleTypeById(Long id){
         try{
-            VehicleType vehicleType =  vehicleTypeRepository.findById(id).orElse(null);
-            if(vehicleType == null){
-                throw new EntityNotFoundException("VehicleType not found for id: " + id);
-            }
-            return vehicleType;
+            return vehicleTypeRepository.findById(id).orElse(null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

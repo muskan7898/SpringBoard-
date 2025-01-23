@@ -22,6 +22,22 @@ public class MaintenanceScheduleCoreService {
         }
     }
 
+    public MaintenanceSchedule getScheduleByIdAndVehicleId(Long id, Long vehicleId){
+        try{
+           return maintenanceScheduleRepository.findByIdAndVehicleId(id, vehicleId).orElse(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteScheduleByVehicleId(Long vehicleId){
+        try{
+            maintenanceScheduleRepository.deleteByVehicleId(vehicleId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public MaintenanceSchedule updateScheduleById(Long id, MaintenanceSchedule updatedSchedule){
         try{
             MaintenanceSchedule existingSchedule = maintenanceScheduleRepository.findById(id)
