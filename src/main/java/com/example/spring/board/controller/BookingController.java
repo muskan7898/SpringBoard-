@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/booking")
 public class BookingController {
-    private BookingService bookingService;
+    private final BookingService bookingService;
 
     @PostMapping("/create")
     public ResponseEntity<String> insertBooking(@RequestBody @Valid CreateBooking createBooking){
@@ -33,16 +33,15 @@ public class BookingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookingDetail> getBookingById(@PathVariable Long id) {
-        return bookingService.getBookingByIdService(id);
+        return ResponseEntity.ok(bookingService.getBookingByIdService(id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBooking(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBooking(@PathVariable Long id)
+    {
         bookingService.deleteBookingByIdService(id);
+        return ResponseEntity.ok().build();
     }
 
-//    @GetMapping("/by-vehicle/{vehicleId}")
-//    public BookingDetail getBookingsByVehicle(@PathVariable Long vehicleId) {
-//        return bookingService.getBookingByVehicleIdService(vehicleId);
-//    }
+
 }
