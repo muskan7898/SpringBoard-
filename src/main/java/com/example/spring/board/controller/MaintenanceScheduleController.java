@@ -2,8 +2,6 @@ package com.example.spring.board.controller;
 
 import com.example.spring.board.dto.req.CreateMaintenanceSchedule;
 import com.example.spring.board.dto.req.UpdateVehicleMaintenanceSchedule;
-import com.example.spring.board.dto.res.MaintenanceScheduleDetail;
-import com.example.spring.board.model.MaintenanceSchedule;
 import com.example.spring.board.services.MaintenanceScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +62,7 @@ public class MaintenanceScheduleController {
         }
     }
 
-    @GetMapping("/{vehicleId}")
+    @GetMapping("get-by-vehicleId/{vehicleId}")
     public ResponseEntity<?> getSchedulesByVehicle(@PathVariable Long vehicleId) {
         try{
             return ResponseEntity.ok(maintenanceScheduleService.getByVehicleIdService(vehicleId));

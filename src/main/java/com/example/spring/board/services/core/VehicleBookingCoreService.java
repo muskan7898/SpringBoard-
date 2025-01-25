@@ -18,4 +18,13 @@ public class VehicleBookingCoreService {
             throw new RuntimeException(e);
         }
     }
+
+    public VehicleBooking getVehicleBookingByVehicleId(Long id){
+        try {
+            return vehicleBookingRepository.getByVehicleId(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+

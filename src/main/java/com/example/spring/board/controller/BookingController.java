@@ -2,10 +2,7 @@ package com.example.spring.board.controller;
 
 
 import com.example.spring.board.dto.req.CreateBooking;
-import com.example.spring.board.dto.res.BookingDetail;
-import com.example.spring.board.model.Booking;
 import com.example.spring.board.services.BookingService;
-import com.example.spring.board.services.core.BookingCoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

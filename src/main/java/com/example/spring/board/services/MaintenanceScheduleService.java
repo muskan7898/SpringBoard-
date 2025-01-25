@@ -21,11 +21,11 @@ public class MaintenanceScheduleService {
     private final MaintenanceScheduleCoreService maintenanceScheduleCoreService;
 
     public String insertScheduleService(@RequestBody CreateMaintenanceSchedule createMaintenanceSchedule){
-        MaintenanceSchedule maintenanceSchedule = new MaintenanceSchedule();
-
-        maintenanceSchedule.setServiceDetail(createMaintenanceSchedule.getServiceDetail());
-        maintenanceSchedule.setServiceDate(createMaintenanceSchedule.getServiceDate());
-        maintenanceSchedule.setVehicleId(createMaintenanceSchedule.getVehicleId());
+        MaintenanceSchedule maintenanceSchedule = MaintenanceSchedule.builder()
+                .serviceDate(createMaintenanceSchedule.getServiceDate())
+                .serviceDetail(createMaintenanceSchedule.getServiceDetail())
+                .vehicleId(createMaintenanceSchedule.getVehicleId())
+                .build();
 
         MaintenanceSchedule savedSchedule = maintenanceScheduleCoreService.saveSchedule(maintenanceSchedule);
         return savedSchedule.getId().toString();
@@ -33,9 +33,7 @@ public class MaintenanceScheduleService {
 
     public String updateScheduleService(Long vehicleId, Long id, UpdateVehicleMaintenanceSchedule schedule){
         MaintenanceSchedule maintenanceSchedule = maintenanceScheduleCoreService.getScheduleByIdAndVehicleId(id, vehicleId);
-        System.out.println(maintenanceSchedule);
         maintenanceSchedule.setServiceDetail(schedule.getServiceDetail());
-
         maintenanceScheduleCoreService.saveSchedule(maintenanceSchedule);
         return maintenanceSchedule.getId().toString();
     }
@@ -45,6 +43,7 @@ public class MaintenanceScheduleService {
         if(maintenanceSchedule == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Return 404 if booking doesn't exist
         }
+
         maintenanceScheduleCoreService.deleteScheduleByVehicleId(vehicleId, id);
         return ResponseEntity.ok(maintenanceSchedule);
     }
@@ -70,15 +69,13 @@ public class MaintenanceScheduleService {
         List<MaintenanceScheduleDetail> maintenanceScheduleDetails = new ArrayList<>();
 
         for(MaintenanceSchedule m : maintenanceSchedules){
-            MaintenanceScheduleDetail maintenanceScheduleDetail = new MaintenanceScheduleDetail();
-            maintenanceScheduleDetail.setId(m.getId());
-            maintenanceScheduleDetail.setServiceDetail(m.getServiceDetail());
-            maintenanceScheduleDetail.setServiceDate(m.getServiceDate());
-            maintenanceScheduleDetail.setVehicleId(m.getVehicleId());
-
-            maintenanceScheduleDetails.add(maintenanceScheduleDetail);
+            maintenanceScheduleDetails.add(new MaintenanceScheduleDetail(
+                    m.getId(),
+                    m.getVehicleId(),
+                    m.getServiceDate(),
+                    m.getServiceDetail()
+            ));
         }
-
         return maintenanceScheduleDetails;
     }
 

@@ -20,12 +20,12 @@ public class BookingService {
     private final BookingCoreService bookingCoreService;
 
     public String insertBookingService(@RequestBody CreateBooking createBooking){
-        Booking booking = new Booking();
-        booking.setStartDate(createBooking.getStartDate());
-        booking.setEndDate(createBooking.getEndDate());
+        Booking booking = Booking.builder()
+                .startDate(createBooking.getStartDate())
+                .endDate(createBooking.getEndDate())
+                .build();
 
         Booking savedBooking = bookingCoreService.saveBooking(booking);
-
         return savedBooking.getId().toString();
     }
 
@@ -34,12 +34,11 @@ public class BookingService {
         List<BookingDetail> bookingDetails = new ArrayList<>();
 
         bookings.forEach(b -> {
-            BookingDetail bookingDetail = new BookingDetail(
+            bookingDetails.add(new BookingDetail(
                     b.getId(),
                     b.getStartDate(),
                     b.getEndDate()
-            );
-            bookingDetails.add(bookingDetail);
+            ));
         });
         return ResponseEntity.ok(bookingDetails);
     }

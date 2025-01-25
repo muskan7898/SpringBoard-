@@ -2,9 +2,7 @@ package com.example.spring.board.controller;
 
 import com.example.spring.board.dto.req.CreateVehicle;
 import com.example.spring.board.dto.req.UpdateVehicleStatus;
-import com.example.spring.board.dto.res.VehicleDetail;
 import com.example.spring.board.enums.VehicleStatus;
-import com.example.spring.board.model.Vehicle;
 import com.example.spring.board.services.VehicleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -70,8 +68,8 @@ public class VehicleController {
         }
     }
 
-    @GetMapping("/by-status/{status}")
-    public ResponseEntity<?> getVehiclesByStatus(@PathVariable VehicleStatus status) {
+    @GetMapping("/by-status")
+    public ResponseEntity<?> getVehiclesByStatus(@RequestParam("status") VehicleStatus status) {
         try{
             return vehicleService.getVehicleByStatusService(status);
         } catch (Exception e) {

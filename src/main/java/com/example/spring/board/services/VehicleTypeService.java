@@ -20,23 +20,27 @@ public class VehicleTypeService {
     private final VehicleTypeCoreService vehicleTypeCoreService;
 
     public String insertVehicleTypeService(@RequestBody VehicleTypeDetail vehicleTypeDetail){
-        VehicleType vehicleType = new VehicleType();
-        vehicleType.setTypeName(vehicleTypeDetail.getType());
+        VehicleType vehicleType = VehicleType.builder()
+                                    .typeName(vehicleTypeDetail.getType())
+                                    .build();
+
         VehicleType savedVehicleType = vehicleTypeCoreService.saveVehicleType(vehicleType);
         return savedVehicleType.getId().toString();
     }
 
     public VehicleTypeDetail getVehicleByIdService(Long id){
         VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(id);
-        VehicleTypeDetail vehicleTypeDetail = new VehicleTypeDetail();
-        vehicleTypeDetail.setTypeId(vehicleType.getId());
-        vehicleTypeDetail.setType(vehicleType.getTypeName());
-        return vehicleTypeDetail;
+
+        return new VehicleTypeDetail(
+                vehicleType.getId(),
+                vehicleType.getTypeName()
+        );
     }
 
 
     public ResponseEntity<VehicleType> deleteVehicleTypeByIdService(Long id){
         VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(id);
+
         if(Objects.isNull(vehicleType)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -50,14 +54,11 @@ public class VehicleTypeService {
         List<VehicleTypeDetail> vehicleTypeDetails = new ArrayList<>();
 
         for(VehicleType vt : vehicleTypes){
-            VehicleTypeDetail vehicleTypeDetail = new VehicleTypeDetail();
-            vehicleTypeDetail.setTypeId(vt.getId());
-            vehicleTypeDetail.setType(vt.getTypeName());
-
-            vehicleTypeDetails.add(vehicleTypeDetail);
+            vehicleTypeDetails.add(new VehicleTypeDetail(
+                    vt.getId(),
+                    vt.getTypeName()
+            ));
         }
-
         return ResponseEntity.ok(vehicleTypeDetails);
     }
-
 }

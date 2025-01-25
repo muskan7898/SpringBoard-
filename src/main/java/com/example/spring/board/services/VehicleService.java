@@ -28,23 +28,27 @@ public class VehicleService {
     private final VehicleTypeCoreService vehicleTypeCoreService;
 
     public String insertVehicleService(CreateVehicle createVehicle){
-        Vehicle vehicle = new Vehicle();
+        Vehicle vehicle = Vehicle.builder()
+                .status(createVehicle.getStatus())
+                        .model(createVehicle.getModel())
+                                        .typeId(createVehicle.getTypeId())
+                                                .manufactureYear(createVehicle.getManufactureYear())
+                                                        .build();
 
-        vehicle.setStatus(createVehicle.getStatus());
-        vehicle.setManufactureYear(createVehicle.getManufactureYear());
-        vehicle.setModel(createVehicle.getModel());
-        vehicle.setTypeId(createVehicle.getTypeId());
         Vehicle savedVehicle = vehicleCoreService.saveVehicle(vehicle);
-
         return savedVehicle.getId().toString();
     }
 
     public String updateVehicleStatusService(UpdateVehicleStatus updateVehicleStatus, Long id){
         try {
             Vehicle existingVehicle = vehicleCoreService.getVehicleById(id);
+            if(Objects.isNull(existingVehicle)){
+                throw new EntityNotFoundException("vehicle not found for this id: " + id);
+            }
             existingVehicle.setStatus(updateVehicleStatus.getNewStatus());
             vehicleCoreService.saveVehicle(existingVehicle);
             return id.toString();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -60,46 +64,38 @@ public class VehicleService {
         }
 
         for (Vehicle v : vehicles) {
-            if (v == null) continue;
-
-            VehicleDetail v1 = new VehicleDetail();
-            v1.setManufactureYear(v.getManufactureYear());
-            v1.setVehicleId(v.getId());
-            v1.setModel(v.getModel());
-            v1.setStatus(v.getStatus() != null ? v.getStatus().toString() : "UNKNOWN");
 
             VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(v.getTypeId());
-            if (vehicleType != null) {
-                v1.setTypeName(vehicleType.getTypeName());
-            } else {
-                v1.setTypeName(null);
-            }
-            vehicleDetails.add(v1);
+            String typeName = (vehicleType != null) ? vehicleType.getTypeName() : "Unknown";
+
+            vehicleDetails.add(new VehicleDetail(
+                    v.getId(),
+                    v.getModel(),
+                    v.getManufactureYear(),
+                    v.getStatus().toString(),
+                    typeName
+            ));
         }
         return ResponseEntity.ok(vehicleDetails);
     }
 
     public ResponseEntity<VehicleDetail> getVehicleByIdService(Long id) {
-        Vehicle vehicle = vehicleCoreService.getVehicleById(id);
+        Vehicle v = vehicleCoreService.getVehicleById(id);
 
-        if (Objects.isNull(vehicle)) {
-            return ResponseEntity.notFound().build(); // Return 404 if no vehicle is found
+        if (Objects.isNull(v)) {
+            return ResponseEntity.notFound().build();
         }
+        VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(v.getTypeId());
+        String typeName = (vehicleType != null) ? vehicleType.getTypeName() : "Unknown";
 
-        VehicleDetail vehicleDetail = new VehicleDetail();
-        vehicleDetail.setVehicleId(vehicle.getId());
-        vehicleDetail.setModel(vehicle.getModel());
-        vehicleDetail.setStatus(vehicle.getStatus() != null ? vehicle.getStatus().toString() : "UNKNOWN");
-        vehicleDetail.setManufactureYear(vehicle.getManufactureYear());
 
-        VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(vehicle.getTypeId());
-        if (vehicleType != null) {
-            vehicleDetail.setTypeName(vehicleType.getTypeName());
-        } else {
-            vehicleDetail.setTypeName(null);
-        }
-
-        return ResponseEntity.ok(vehicleDetail);
+        return ResponseEntity.ok(new VehicleDetail(
+                v.getId(),
+                v.getModel(),
+                v.getManufactureYear(),
+                v.getStatus().toString(),
+                typeName
+         ));
     }
 
     public ResponseEntity<Vehicle> deleteVehicleByService(Long id){
@@ -120,21 +116,16 @@ public class VehicleService {
         }
 
         for (Vehicle v : vehicles) {
-            if (v == null) continue;
-
-            VehicleDetail v1 = new VehicleDetail();
-            v1.setManufactureYear(v.getManufactureYear());
-            v1.setVehicleId(v.getId());
-            v1.setModel(v.getModel());
-            v1.setStatus(v.getStatus() != null ? v.getStatus().toString() : "UNKNOWN");
-
             VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(v.getTypeId());
-            if (vehicleType != null) {
-                v1.setTypeName(vehicleType.getTypeName());
-            } else {
-                v1.setTypeName(null);
-            }
-            vehicleDetails.add(v1);
+            String typeName = (vehicleType != null) ? vehicleType.getTypeName() : "Unknown";
+
+            vehicleDetails.add(new VehicleDetail(
+                    v.getId(),
+                    v.getModel(),
+                    v.getManufactureYear(),
+                    v.getStatus().toString(),
+                    typeName
+            ));
         }
         return ResponseEntity.ok(vehicleDetails);
     }
