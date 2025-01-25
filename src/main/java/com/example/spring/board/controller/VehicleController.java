@@ -4,9 +4,11 @@ import com.example.spring.board.dto.req.CreateVehicle;
 import com.example.spring.board.dto.req.UpdateVehicleStatus;
 import com.example.spring.board.dto.res.VehicleDetail;
 import com.example.spring.board.enums.VehicleStatus;
+import com.example.spring.board.model.Vehicle;
 import com.example.spring.board.services.VehicleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,35 +22,60 @@ import java.util.List;
 public class VehicleController {
     private final VehicleService vehicleService;
     @PostMapping("/create")
-    public ResponseEntity<String> insertVehicle(@RequestBody CreateVehicle createVehicle){
-        return ResponseEntity.ok(vehicleService.insertVehicleService(createVehicle));
+    public ResponseEntity<String> insertVehicle(@RequestBody @Valid CreateVehicle createVehicle){
+        try{
+            return ResponseEntity.ok(vehicleService.insertVehicleService(createVehicle));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @PutMapping("/update-status/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<String> updateVehicleStatus(@RequestBody @Valid UpdateVehicleStatus updateVehicleStatus, @PathVariable Long id){
-        return ResponseEntity.ok(vehicleService.updateVehicleStatusService(updateVehicleStatus, id));
+        try{
+            return ResponseEntity.ok(vehicleService.updateVehicleStatusService(updateVehicleStatus, id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
     }
 
-    @GetMapping("/get-all")
-    public ResponseEntity<List<VehicleDetail>> getAllVehicle(){
-        return vehicleService.getAllVehicleService();
+    @GetMapping("/")
+    public ResponseEntity<?> getAllVehicle(){
+        try{
+            return vehicleService.getAllVehicleService();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+
+        }
     }
 
 
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<VehicleDetail> getVehicleById(@PathVariable Long id){
-        return vehicleService.getVehicleByIdService(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getVehicleById(@PathVariable Long id){
+        try{
+            return vehicleService.getVehicleByIdService(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+
+        }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteVehicleById(@PathVariable Long id){
-        vehicleService.deleteVehicleByService(id);
-        return  ResponseEntity.ok().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteVehicleById(@PathVariable Long id){
+        try{
+            return vehicleService.deleteVehicleByService(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+
+        }
     }
 
     @GetMapping("/by-status/{status}")
-    public ResponseEntity<List<VehicleDetail>> getVehiclesByStatus(@PathVariable VehicleStatus status) {
-        return vehicleService.getVehicleByStatusService(status);
+    public ResponseEntity<?> getVehiclesByStatus(@PathVariable VehicleStatus status) {
+        try{
+            return vehicleService.getVehicleByStatusService(status);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
     }
-
 }

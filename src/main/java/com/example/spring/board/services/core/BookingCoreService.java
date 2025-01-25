@@ -55,15 +55,5 @@ public class BookingCoreService {
             throw new RuntimeException(e);
         }
     }
-
-
-//    public Booking getBookingByVehicleId(Long VehicleId){
-//        try {
-//            return bookingRepository.getByVehicleId(VehicleId);
-//        } catch (Exception e) {
-//            System.out.println("some error by fetching booking by vehicle id: " + e.getMessage());
-//            throw new RuntimeException(e);
-//        }
-//    }
 }
 

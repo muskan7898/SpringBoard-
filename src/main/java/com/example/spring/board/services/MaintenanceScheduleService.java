@@ -7,6 +7,8 @@ import com.example.spring.board.model.MaintenanceSchedule;
 import com.example.spring.board.services.core.MaintenanceScheduleCoreService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -38,8 +40,13 @@ public class MaintenanceScheduleService {
         return maintenanceSchedule.getId().toString();
     }
 
-    public void deleteScheduleByVehicleIdService(Long vehicleId, Long id){
+    public ResponseEntity<MaintenanceSchedule> deleteScheduleByVehicleIdService(Long vehicleId, Long id){
+        MaintenanceSchedule maintenanceSchedule = maintenanceScheduleCoreService.getScheduleByIdAndVehicleId(id, vehicleId);
+        if(maintenanceSchedule == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Return 404 if booking doesn't exist
+        }
         maintenanceScheduleCoreService.deleteScheduleByVehicleId(vehicleId, id);
+        return ResponseEntity.ok(maintenanceSchedule);
     }
 
 
@@ -49,13 +56,12 @@ public class MaintenanceScheduleService {
             throw new EntityNotFoundException("schedule is not exist for this id: " + id);
         }
 
-        MaintenanceScheduleDetail maintenanceScheduleDetail = new MaintenanceScheduleDetail();
-        maintenanceScheduleDetail.setId(maintenanceSchedule.getId());
-        maintenanceScheduleDetail.setServiceDetail(maintenanceSchedule.getServiceDetail());
-        maintenanceScheduleDetail.setServiceDate(maintenanceSchedule.getServiceDate());
-        maintenanceScheduleDetail.setVehicleId(maintenanceSchedule.getVehicleId());
-
-        return maintenanceScheduleDetail;
+        return new MaintenanceScheduleDetail(
+                maintenanceSchedule.getId(),
+                maintenanceSchedule.getVehicleId(),
+                maintenanceSchedule.getServiceDate(),
+                maintenanceSchedule.getServiceDetail()
+        );
     }
 
     public List<MaintenanceScheduleDetail> getByVehicleIdService(Long vehicleId){

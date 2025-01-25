@@ -8,7 +8,9 @@ import com.example.spring.board.model.Vehicle;
 import com.example.spring.board.model.VehicleType;
 import com.example.spring.board.services.core.VehicleCoreService;
 import com.example.spring.board.services.core.VehicleTypeCoreService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class VehicleService {
     private final VehicleCoreService vehicleCoreService;
     private final VehicleTypeCoreService vehicleTypeCoreService;
 
-    public String insertVehicleService(@RequestBody CreateVehicle createVehicle){
+    public String insertVehicleService(CreateVehicle createVehicle){
         Vehicle vehicle = new Vehicle();
 
         vehicle.setStatus(createVehicle.getStatus());
@@ -36,7 +39,7 @@ public class VehicleService {
         return savedVehicle.getId().toString();
     }
 
-    public String updateVehicleStatusService(@RequestBody UpdateVehicleStatus updateVehicleStatus, @PathVariable Long id){
+    public String updateVehicleStatusService(UpdateVehicleStatus updateVehicleStatus, Long id){
         try {
             Vehicle existingVehicle = vehicleCoreService.getVehicleById(id);
             existingVehicle.setStatus(updateVehicleStatus.getNewStatus());
@@ -52,7 +55,7 @@ public class VehicleService {
 
         List<Vehicle> vehicles = vehicleCoreService.getAllVehicle();
 
-        if (vehicles == null || vehicles.isEmpty()) {
+        if(Objects.isNull(vehicles)){
             return ResponseEntity.ok(vehicleDetails);
         }
 
@@ -79,7 +82,7 @@ public class VehicleService {
     public ResponseEntity<VehicleDetail> getVehicleByIdService(Long id) {
         Vehicle vehicle = vehicleCoreService.getVehicleById(id);
 
-        if (vehicle == null) {
+        if (Objects.isNull(vehicle)) {
             return ResponseEntity.notFound().build(); // Return 404 if no vehicle is found
         }
 
@@ -99,15 +102,20 @@ public class VehicleService {
         return ResponseEntity.ok(vehicleDetail);
     }
 
-    public void deleteVehicleByService(Long id){
+    public ResponseEntity<Vehicle> deleteVehicleByService(Long id){
+        Vehicle vehicle = vehicleCoreService.getVehicleById(id);
+        if(Objects.isNull(vehicle)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Return 404 if booking doesn't exist
+        }
         vehicleCoreService.deleteVehicle(id);
+        return ResponseEntity.ok(vehicle);
     }
 
     public ResponseEntity<List<VehicleDetail>> getVehicleByStatusService(VehicleStatus status){
         List<Vehicle> vehicles = vehicleCoreService.getVehicleByStatus(status);
         List<VehicleDetail> vehicleDetails = new ArrayList<>();
 
-        if (vehicles == null || vehicles.isEmpty()) {
+        if (Objects.isNull(vehicles)) {
             return ResponseEntity.ok(vehicleDetails);
         }
 
