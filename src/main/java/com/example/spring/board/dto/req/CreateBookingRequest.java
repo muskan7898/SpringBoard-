@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateBooking {
+public class CreateBookingRequest {
 
     @FutureOrPresent(message = "start date cannot be past")
     private Date startDate;

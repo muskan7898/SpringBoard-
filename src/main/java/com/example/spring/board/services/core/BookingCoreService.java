@@ -6,7 +6,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 @Service
@@ -34,13 +38,23 @@ public class BookingCoreService {
         }
     }
 
-    public Booking getBookingById(Long id){
+    /*
+        * class A {}
+        class B extends A {}
+        class C extends B {}
+
+        try {}
+        catch(A e) {}
+        catch(B e) {}
+        catch(C e) {}
+    * */
+    public Booking getBookingById(Long id) {
         try{
-            Booking booking = bookingRepository.findById(id).orElse(null);
-            if(booking == null){
-                throw new EntityNotFoundException("booking not found for this id: " + id);
-            }
-            return booking;
+            Supplier<EntityNotFoundException> orElseHandler = () ->
+                    new EntityNotFoundException("booking not found for this id: " + id);
+            return bookingRepository.findById(id).orElseThrow(orElseHandler);
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(e);
         } catch (Exception e) {
             System.out.println("some error while get booking by id: " + e.getMessage());
             throw new RuntimeException(e);

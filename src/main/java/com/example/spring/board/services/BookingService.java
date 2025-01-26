@@ -1,16 +1,16 @@
 package com.example.spring.board.services;
 
-import com.example.spring.board.dto.req.CreateBooking;
+import com.example.spring.board.dto.req.CreateBookingRequest;
 import com.example.spring.board.dto.res.BookingDetail;
 import com.example.spring.board.model.Booking;
 import com.example.spring.board.services.core.BookingCoreService;
+import com.example.spring.board.utils.Mappers;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,42 +18,36 @@ import java.util.List;
 public class BookingService {
     private final BookingCoreService bookingCoreService;
 
-    public String insertBookingService(@RequestBody CreateBooking createBooking){
+    public String insertBooking(CreateBookingRequest createBookingRequest){
         Booking booking = Booking.builder()
-                .startDate(createBooking.getStartDate())
-                .endDate(createBooking.getEndDate())
+                .startDate(createBookingRequest.getStartDate())
+                .endDate(createBookingRequest.getEndDate())
                 .build();
 
         Booking savedBooking = bookingCoreService.saveBooking(booking);
         return savedBooking.getId().toString();
     }
 
-    public List<BookingDetail> getAllBookingService(){
-        List<Booking> bookings = bookingCoreService.getAllBooking();
-        List<BookingDetail> bookingDetails = new ArrayList<>();
-
-        bookings.forEach(b -> {
-            bookingDetails.add(new BookingDetail(
-                    b.getId(),
-                    b.getStartDate(),
-                    b.getEndDate()
-            ));
-        });
-        return bookingDetails;
+    // IMPORTANT
+    public List<BookingDetail> getAllBookings() {
+        return bookingCoreService
+                .getAllBooking()
+                .stream()
+                .map(Mappers::bookingDetailFromBooking)
+                .toList();
     }
 
-    public BookingDetail getBookingByIdService(Long id){
-        Booking booking = bookingCoreService.getBookingById(id);
-        return new BookingDetail(
-                booking.getId(),
-                booking.getStartDate(),
-                booking.getEndDate()
-        );
+    public BookingDetail getBookingById(Long id){
+        try {
+            return Mappers.bookingDetailFromBooking(bookingCoreService.getBookingById(id));
+        } catch(EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
-    public Booking deleteBookingByIdService(Long id){
+    public Booking deleteBookingById(Long id){
         Booking booking = bookingCoreService.getBookingById(id);
-        if(booking == null){
+        if(booking == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "booking not found for this id: " + id);
         }
         bookingCoreService.deleteBookingById(id);
