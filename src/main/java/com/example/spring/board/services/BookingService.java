@@ -4,12 +4,11 @@ import com.example.spring.board.dto.req.CreateBooking;
 import com.example.spring.board.dto.res.BookingDetail;
 import com.example.spring.board.model.Booking;
 import com.example.spring.board.services.core.BookingCoreService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ public class BookingService {
         return savedBooking.getId().toString();
     }
 
-    public ResponseEntity<List<BookingDetail>> getAllBookingService(){
+    public List<BookingDetail> getAllBookingService(){
         List<Booking> bookings = bookingCoreService.getAllBooking();
         List<BookingDetail> bookingDetails = new ArrayList<>();
 
@@ -40,7 +39,7 @@ public class BookingService {
                     b.getEndDate()
             ));
         });
-        return ResponseEntity.ok(bookingDetails);
+        return bookingDetails;
     }
 
     public BookingDetail getBookingByIdService(Long id){
@@ -52,12 +51,12 @@ public class BookingService {
         );
     }
 
-    public ResponseEntity<Booking> deleteBookingByIdService(Long id){
+    public Booking deleteBookingByIdService(Long id){
         Booking booking = bookingCoreService.getBookingById(id);
         if(booking == null){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Return 404 if booking doesn't exist
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "booking not found for this id: " + id);
         }
         bookingCoreService.deleteBookingById(id);
-        return ResponseEntity.ok(booking);
+        return booking;
     }
 }

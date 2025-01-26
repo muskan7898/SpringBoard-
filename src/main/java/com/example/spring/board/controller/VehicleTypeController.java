@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/vehicle-type")
 public class VehicleTypeController {
     private final VehicleTypeService vehicleTypeService;
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<String> insertVehicleType(@RequestBody @Valid VehicleTypeDetail vehicleTypeDetail){
         try{
             return ResponseEntity.ok(vehicleTypeService.insertVehicleTypeService(vehicleTypeDetail));
@@ -39,17 +39,17 @@ public class VehicleTypeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteVehicleType(@PathVariable Long id) {
         try{
-            return vehicleTypeService.deleteVehicleTypeByIdService(id);
+            return ResponseEntity.ok(vehicleTypeService.deleteVehicleTypeByIdService(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
 
         }
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<?> getAllVehicleType(){
         try {
-            return vehicleTypeService.getAllVehicleTypeService();
+            return ResponseEntity.ok(vehicleTypeService.getAllVehicleTypeService());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }

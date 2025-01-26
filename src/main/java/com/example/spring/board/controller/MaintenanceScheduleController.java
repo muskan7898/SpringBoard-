@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,12 +18,12 @@ public class MaintenanceScheduleController {
 
     private final MaintenanceScheduleService maintenanceScheduleService;
 
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<String> insertMaintenanceSchedule(@RequestBody @Valid CreateMaintenanceSchedule createMaintenanceSchedule){
         try{
             return ResponseEntity.ok(maintenanceScheduleService.insertScheduleService(createMaintenanceSchedule));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: "+ e.getMessage());
         }
     }
 
@@ -43,7 +42,7 @@ public class MaintenanceScheduleController {
     @DeleteMapping("/{vehicleId}/{id}")
     public ResponseEntity<?> deleteMaintenanceById(@PathVariable Long vehicleId, @PathVariable Long id){
         try{
-            return maintenanceScheduleService.deleteScheduleByVehicleIdService(vehicleId, id);
+            return ResponseEntity.ok(maintenanceScheduleService.deleteScheduleByVehicleIdService(vehicleId, id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
 
@@ -62,7 +61,7 @@ public class MaintenanceScheduleController {
         }
     }
 
-    @GetMapping("get-by-vehicleId/{vehicleId}")
+    @GetMapping("/get-by-vehicleId/{vehicleId}")
     public ResponseEntity<?> getSchedulesByVehicle(@PathVariable Long vehicleId) {
         try{
             return ResponseEntity.ok(maintenanceScheduleService.getByVehicleIdService(vehicleId));

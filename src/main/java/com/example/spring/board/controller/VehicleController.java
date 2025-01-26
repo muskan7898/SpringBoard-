@@ -19,12 +19,12 @@ import java.util.List;
 @RequestMapping("/vehicle")
 public class VehicleController {
     private final VehicleService vehicleService;
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<String> insertVehicle(@RequestBody @Valid CreateVehicle createVehicle){
         try{
             return ResponseEntity.ok(vehicleService.insertVehicleService(createVehicle));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
     }
 
@@ -37,10 +37,10 @@ public class VehicleController {
         }
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<?> getAllVehicle(){
         try{
-            return vehicleService.getAllVehicleService();
+            return ResponseEntity.ok(vehicleService.getAllVehicleService());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
 
@@ -51,7 +51,7 @@ public class VehicleController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getVehicleById(@PathVariable Long id){
         try{
-            return vehicleService.getVehicleByIdService(id);
+            return ResponseEntity.ok(vehicleService.getVehicleByIdService(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
 
@@ -61,7 +61,7 @@ public class VehicleController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteVehicleById(@PathVariable Long id){
         try{
-            return vehicleService.deleteVehicleByService(id);
+            return ResponseEntity.ok(vehicleService.deleteVehicleByService(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
 
@@ -71,7 +71,7 @@ public class VehicleController {
     @GetMapping("/by-status")
     public ResponseEntity<?> getVehiclesByStatus(@RequestParam("status") VehicleStatus status) {
         try{
-            return vehicleService.getVehicleByStatusService(status);
+            return ResponseEntity.ok(vehicleService.getVehicleByStatusService(status));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }

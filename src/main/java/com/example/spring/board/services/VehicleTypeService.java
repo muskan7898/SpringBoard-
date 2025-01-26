@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,18 +39,17 @@ public class VehicleTypeService {
     }
 
 
-    public ResponseEntity<VehicleType> deleteVehicleTypeByIdService(Long id){
+    public VehicleType deleteVehicleTypeByIdService(Long id){
         VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(id);
 
         if(Objects.isNull(vehicleType)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle type not found for this id: "+ id);
         }
-
         vehicleTypeCoreService.deleteVehicleTypeById(id);
-        return ResponseEntity.ok(vehicleType);
+        return vehicleType;
     }
 
-    public ResponseEntity<List<VehicleTypeDetail>> getAllVehicleTypeService(){
+    public List<VehicleTypeDetail> getAllVehicleTypeService(){
         List<VehicleType> vehicleTypes = vehicleTypeCoreService.getAllVehicleTypes();
         List<VehicleTypeDetail> vehicleTypeDetails = new ArrayList<>();
 
@@ -59,6 +59,6 @@ public class VehicleTypeService {
                     vt.getTypeName()
             ));
         }
-        return ResponseEntity.ok(vehicleTypeDetails);
+        return vehicleTypeDetails;
     }
 }

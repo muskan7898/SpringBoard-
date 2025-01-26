@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.List;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
 
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<String> insertBooking(@RequestBody @Valid CreateBooking createBooking){
         try{
             return ResponseEntity.ok(bookingService.insertBookingService(createBooking));
@@ -29,10 +29,10 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<?> getAllBooking(){
         try{
-            return bookingService.getAllBookingService();
+            return ResponseEntity.ok(bookingService.getAllBookingService());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
@@ -51,7 +51,7 @@ public class BookingController {
     public ResponseEntity<?> deleteBooking(@PathVariable Long id)
     {
         try{
-            return bookingService.deleteBookingByIdService(id);
+            return ResponseEntity.ok(bookingService.deleteBookingByIdService(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }

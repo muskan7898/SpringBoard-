@@ -8,13 +8,15 @@ import com.example.spring.board.services.core.BookingCoreService;
 import com.example.spring.board.services.core.VehicleBookingCoreService;
 import com.example.spring.board.services.core.VehicleCoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
+
 import java.util.Objects;
 
-import static com.example.spring.board.enums.VehicleStatus.BOOKED;
 
 @Service
 @RequiredArgsConstructor
@@ -23,18 +25,18 @@ public class VehicleBookingService {
     private final VehicleCoreService vehicleCoreService;
     private final BookingCoreService bookingCoreService;
 
-    public ResponseEntity<String> insertVehicleBookingService(VehicleBookingDetail vehicleBookingDetail){
+    public String insertVehicleBookingService(VehicleBookingDetail vehicleBookingDetail){
         Long vehicleId = vehicleBookingDetail.getVehicleId();
         Long bookingId = vehicleBookingDetail.getBookingId();
 
         Vehicle vehicle = vehicleCoreService.getVehicleById(vehicleId);
         if(Objects.isNull(vehicle)){
-            return ResponseEntity.status(404).body("Vehicle not found for this id: " + vehicleId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle not exist for this id: " + vehicleId);
         }
 
         Booking booking = bookingCoreService.getBookingById(bookingId);
         if(Objects.isNull(booking)){
-            return ResponseEntity.status(404).body("Booking not found for this id: " + bookingId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "booking does not exists for this id: "+ bookingId);
         }
 
         VehicleBooking vehicleBooking = VehicleBooking.builder()
@@ -43,6 +45,6 @@ public class VehicleBookingService {
                 .build();
 
         VehicleBooking savedVehicleBooking = vehicleBookingCoreService.saveVehicleBooking(vehicleBooking);
-        return ResponseEntity.ok(savedVehicleBooking.getBookingId().toString());
+        return savedVehicleBooking.getBookingId().toString();
     }
 }

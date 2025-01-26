@@ -8,9 +8,9 @@ import com.example.spring.board.services.core.MaintenanceScheduleCoreService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +38,14 @@ public class MaintenanceScheduleService {
         return maintenanceSchedule.getId().toString();
     }
 
-    public ResponseEntity<MaintenanceSchedule> deleteScheduleByVehicleIdService(Long vehicleId, Long id){
+    public MaintenanceSchedule deleteScheduleByVehicleIdService(Long vehicleId, Long id){
         MaintenanceSchedule maintenanceSchedule = maintenanceScheduleCoreService.getScheduleByIdAndVehicleId(id, vehicleId);
         if(maintenanceSchedule == null){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Return 404 if booking doesn't exist
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "schedule not found with this id and vehicleId");
         }
 
         maintenanceScheduleCoreService.deleteScheduleByVehicleId(vehicleId, id);
-        return ResponseEntity.ok(maintenanceSchedule);
+        return maintenanceSchedule;
     }
 
 

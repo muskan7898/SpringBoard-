@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/vehicle-booking")
 public class VehicleBookingController {
     private final VehicleBookingService vehicleBookingService;
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<String> insertVehicleBooking(@RequestBody @Valid VehicleBookingDetail vehicleBookingDetail){
         try{
-            return vehicleBookingService.insertVehicleBookingService(vehicleBookingDetail);
+            return ResponseEntity.ok(vehicleBookingService.insertVehicleBookingService(vehicleBookingDetail));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
