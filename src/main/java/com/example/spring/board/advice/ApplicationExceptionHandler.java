@@ -14,8 +14,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
-
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleInvalidArgument(RuntimeException ex){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }

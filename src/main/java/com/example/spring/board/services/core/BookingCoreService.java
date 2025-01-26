@@ -12,30 +12,17 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-
 @Service
 @RequiredArgsConstructor
 public class BookingCoreService {
     private final BookingRepository bookingRepository;
 
     public Booking saveBooking(Booking booking){
-        try{
-            return bookingRepository.save(booking);
-        }
-        catch (Exception e){
-            System.out.println("some error while saving booking: "+ e.getMessage());
-            throw new RuntimeException(e);
-        }
+        return bookingRepository.save(booking);
     }
 
     public List<Booking> getAllBooking(){
-        try {
-            return bookingRepository.findAll();
-        }
-        catch (Exception e){
-            System.out.println("some error during find all booking: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        return bookingRepository.findAll();
     }
 
     /*
@@ -49,25 +36,13 @@ public class BookingCoreService {
         catch(C e) {}
     * */
     public Booking getBookingById(Long id) {
-        try{
-            Supplier<EntityNotFoundException> orElseHandler = () ->
-                    new EntityNotFoundException("booking not found for this id: " + id);
-            return bookingRepository.findById(id).orElseThrow(orElseHandler);
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException(e);
-        } catch (Exception e) {
-            System.out.println("some error while get booking by id: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        Supplier<EntityNotFoundException> orElseHandler = () ->
+                new EntityNotFoundException("booking not found for this id: " + id);
+        return bookingRepository.findById(id).orElseThrow(orElseHandler);
     }
 
     public void deleteBookingById(Long id){
-        try {
-            bookingRepository.deleteById(id);
-        } catch (Exception e) {
-            System.out.println("some error while delete booking by id: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        bookingRepository.deleteById(id);
     }
 }
 

@@ -19,22 +19,14 @@ import org.springframework.web.server.ResponseStatusException;
 public class BookingController {
     private final BookingService bookingService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> insertBooking(@RequestBody @Valid CreateBookingRequest createBookingRequest){
-        try{
-            return ResponseEntity.ok(bookingService.insertBooking(createBookingRequest));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
-        }
+        return ResponseEntity.ok(bookingService.insertBooking(createBookingRequest));
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> getAllBooking(){
-        try{
-            return ResponseEntity.ok(bookingService.getAllBookings());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-        }
+        return ResponseEntity.ok(bookingService.getAllBookings());
     }
 
     @GetMapping("/{id}")

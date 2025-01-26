@@ -46,11 +46,12 @@ public class BookingService {
     }
 
     public Booking deleteBookingById(Long id){
-        Booking booking = bookingCoreService.getBookingById(id);
-        if(booking == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "booking not found for this id: " + id);
+        try {
+            Booking booking = bookingCoreService.getBookingById(id);
+            bookingCoreService.deleteBookingById(id);
+            return booking;
+        } catch(EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-        bookingCoreService.deleteBookingById(id);
-        return booking;
     }
 }
