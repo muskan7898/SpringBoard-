@@ -20,12 +20,12 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<String> insertBooking(@RequestBody @Valid CreateBookingRequest createBookingRequest){
+    public ResponseEntity<String> insertBooking(@RequestBody @Valid CreateBookingRequest createBookingRequest) {
         return ResponseEntity.ok(bookingService.insertBooking(createBookingRequest));
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllBooking(){
+    public ResponseEntity<?> getAllBooking() {
         return ResponseEntity.ok(bookingService.getAllBookings());
     }
 
@@ -35,12 +35,7 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBooking(@PathVariable Long id)
-    {
-        try{
-            return ResponseEntity.ok(bookingService.deleteBookingById(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-        }
+    public ResponseEntity<?> deleteBooking(@PathVariable Long id) {
+        return ResponseEntity.ok(bookingService.deleteBookingById(id));
     }
 }

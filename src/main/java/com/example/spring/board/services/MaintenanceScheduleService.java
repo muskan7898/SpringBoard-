@@ -20,7 +20,7 @@ import java.util.List;
 public class MaintenanceScheduleService {
     private final MaintenanceScheduleCoreService maintenanceScheduleCoreService;
 
-    public String insertScheduleService(@RequestBody CreateMaintenanceSchedule createMaintenanceSchedule){
+    public String insertSchedule(@RequestBody CreateMaintenanceSchedule createMaintenanceSchedule){
         MaintenanceSchedule maintenanceSchedule = MaintenanceSchedule.builder()
                 .serviceDate(createMaintenanceSchedule.getServiceDate())
                 .serviceDetail(createMaintenanceSchedule.getServiceDetail())
@@ -31,41 +31,72 @@ public class MaintenanceScheduleService {
         return savedSchedule.getId().toString();
     }
 
-    public String updateScheduleService(Long vehicleId, Long id, UpdateVehicleMaintenanceSchedule schedule){
-        MaintenanceSchedule maintenanceSchedule = maintenanceScheduleCoreService.getScheduleByIdAndVehicleId(id, vehicleId);
-        maintenanceSchedule.setServiceDetail(schedule.getServiceDetail());
-        maintenanceScheduleCoreService.saveSchedule(maintenanceSchedule);
-        return maintenanceSchedule.getId().toString();
-    }
-
-    public MaintenanceSchedule deleteScheduleByVehicleIdService(Long vehicleId, Long id){
-        MaintenanceSchedule maintenanceSchedule = maintenanceScheduleCoreService.getScheduleByIdAndVehicleId(id, vehicleId);
-        if(maintenanceSchedule == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "schedule not found with this id and vehicleId");
+    public String updateSchedule(Long vehicleId, Long id, UpdateVehicleMaintenanceSchedule schedule){
+        try {
+            MaintenanceSchedule maintenanceSchedule = maintenanceScheduleCoreService.getScheduleByIdAndVehicleId(id, vehicleId);
+            if(maintenanceSchedule == null){
+                throw new EntityNotFoundException("schedule not found for this");
+            }
+            maintenanceSchedule.setServiceDetail(schedule.getServiceDetail());
+            maintenanceScheduleCoreService.saveSchedule(maintenanceSchedule);
+            return maintenanceSchedule.getId().toString();
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
-        maintenanceScheduleCoreService.deleteScheduleByVehicleId(vehicleId, id);
-        return maintenanceSchedule;
     }
 
-
-    public MaintenanceScheduleDetail getScheduleByIdService(Long id){
-        MaintenanceSchedule maintenanceSchedule = maintenanceScheduleCoreService.getScheduleById(id);
-        if(maintenanceSchedule == null){
-            throw new EntityNotFoundException("schedule is not exist for this id: " + id);
+    public String updateScheduleById(Long id, UpdateVehicleMaintenanceSchedule schedule){
+        try{
+            MaintenanceSchedule existingSchedule = maintenanceScheduleCoreService.getScheduleById(id);
+            if(existingSchedule == null){
+                throw new EntityNotFoundException("maintenance schedule not exist for this id: "+id);
+            }
+            existingSchedule.setServiceDetail(schedule.getServiceDetail());
+            return maintenanceScheduleCoreService.saveSchedule(existingSchedule).getId().toString();
         }
-
-        return new MaintenanceScheduleDetail(
-                maintenanceSchedule.getId(),
-                maintenanceSchedule.getVehicleId(),
-                maintenanceSchedule.getServiceDate(),
-                maintenanceSchedule.getServiceDetail()
-        );
+        catch(EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public List<MaintenanceScheduleDetail> getByVehicleIdService(Long vehicleId){
+    public MaintenanceSchedule deleteScheduleByVehicleId(Long vehicleId, Long id){
+        try {
+            MaintenanceSchedule maintenanceSchedule = maintenanceScheduleCoreService.getScheduleByIdAndVehicleId(id, vehicleId);
+            if(maintenanceSchedule == null){
+                throw new EntityNotFoundException("schedule not found");
+            }
+            maintenanceScheduleCoreService.deleteScheduleByVehicleId(vehicleId, id);
+            return maintenanceSchedule;
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+
+    public MaintenanceScheduleDetail getScheduleById(Long id){
+        try {
+            MaintenanceSchedule maintenanceSchedule = maintenanceScheduleCoreService.getScheduleById(id);
+            if(maintenanceSchedule == null){
+                throw new EntityNotFoundException("schedule is not exist for this id: " + id);
+            }
+
+            return new MaintenanceScheduleDetail(
+                    maintenanceSchedule.getId(),
+                    maintenanceSchedule.getVehicleId(),
+                    maintenanceSchedule.getServiceDate(),
+                    maintenanceSchedule.getServiceDetail()
+            );
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    public List<MaintenanceScheduleDetail> getByVehicleId(Long vehicleId){
         List<MaintenanceSchedule> maintenanceSchedules =  maintenanceScheduleCoreService.getScheduleByVehicleId(vehicleId);
-
         List<MaintenanceScheduleDetail> maintenanceScheduleDetails = new ArrayList<>();
 
         for(MaintenanceSchedule m : maintenanceSchedules){
@@ -79,4 +110,17 @@ public class MaintenanceScheduleService {
         return maintenanceScheduleDetails;
     }
 
+    public MaintenanceSchedule deleteScheduleById(Long id){
+        try {
+            MaintenanceSchedule existingSchedule = maintenanceScheduleCoreService.getScheduleById(id);
+            if(existingSchedule == null){
+                throw new EntityNotFoundException("schedule not found for this id: "+id);
+            }
+            maintenanceScheduleCoreService.deleteScheduleById(id);
+            return existingSchedule;
+        }
+        catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 }

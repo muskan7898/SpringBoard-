@@ -26,7 +26,7 @@ public class VehicleService {
     private final VehicleCoreService vehicleCoreService;
     private final VehicleTypeCoreService vehicleTypeCoreService;
 
-    public String insertVehicleService(CreateVehicle createVehicle){
+    public String insertVehicle(CreateVehicle createVehicle){
         Vehicle vehicle = Vehicle.builder()
                 .status(createVehicle.getStatus())
                         .model(createVehicle.getModel())
@@ -38,7 +38,7 @@ public class VehicleService {
         return savedVehicle.getId().toString();
     }
 
-    public String updateVehicleStatusService(UpdateVehicleStatus updateVehicleStatus, Long id){
+    public String updateVehicleStatus(UpdateVehicleStatus updateVehicleStatus, Long id){
         try {
             Vehicle existingVehicle = vehicleCoreService.getVehicleById(id);
             if(Objects.isNull(existingVehicle)){
@@ -48,12 +48,12 @@ public class VehicleService {
             vehicleCoreService.saveVehicle(existingVehicle);
             return id.toString();
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    public List<VehicleDetail> getAllVehicleService() {
+    public List<VehicleDetail> getAllVehicle() {
         List<VehicleDetail> vehicleDetails = new ArrayList<>();
 
         List<Vehicle> vehicles = vehicleCoreService.getAllVehicle();
@@ -78,37 +78,44 @@ public class VehicleService {
         return vehicleDetails;
     }
 
-    public VehicleDetail getVehicleByIdService(Long id) {
-        Vehicle v = vehicleCoreService.getVehicleById(id);
+    public VehicleDetail getVehicleById(Long id) {
+        try {
+            Vehicle v = vehicleCoreService.getVehicleById(id);
 
-        if (Objects.isNull(v)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle not found for id: "+ id);
+            if (Objects.isNull(v)) {
+                throw new EntityNotFoundException("vehicle not found for id: "+ id);
+            }
+
+            VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(v.getTypeId());
+            String typeName = (vehicleType != null) ? vehicleType.getTypeName() : "Unknown";
+
+
+            return new VehicleDetail(
+                    v.getId(),
+                    v.getModel(),
+                    v.getManufactureYear(),
+                    v.getStatus().toString(),
+                    typeName
+             );
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
-
-        VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(v.getTypeId());
-        String typeName = (vehicleType != null) ? vehicleType.getTypeName() : "Unknown";
-
-
-        return new VehicleDetail(
-                v.getId(),
-                v.getModel(),
-                v.getManufactureYear(),
-                v.getStatus().toString(),
-                typeName
-         );
     }
 
-    public Vehicle deleteVehicleByService(Long id){
-        Vehicle vehicle = vehicleCoreService.getVehicleById(id);
-        if(Objects.isNull(vehicle)){
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "vehicle not found with id: " + id);
+    public Vehicle deleteVehicleById(Long id){
+        try {
+            Vehicle vehicle = vehicleCoreService.getVehicleById(id);
+            if(Objects.isNull(vehicle)){
+                throw new EntityNotFoundException("vehicle not found with id: " + id);
+            }
+            vehicleCoreService.deleteVehicle(id);
+            return vehicle;
+        } catch(EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-        vehicleCoreService.deleteVehicle(id);
-        return vehicle;
     }
 
-    public List<VehicleDetail> getVehicleByStatusService(VehicleStatus status){
+    public List<VehicleDetail> getVehicleByStatus(VehicleStatus status){
         List<Vehicle> vehicles = vehicleCoreService.getVehicleByStatus(status);
         List<VehicleDetail> vehicleDetails = new ArrayList<>();
 

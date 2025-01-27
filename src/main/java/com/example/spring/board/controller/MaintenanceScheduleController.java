@@ -5,7 +5,6 @@ import com.example.spring.board.dto.req.UpdateVehicleMaintenanceSchedule;
 import com.example.spring.board.services.MaintenanceScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,53 +19,34 @@ public class MaintenanceScheduleController {
 
     @PostMapping()
     public ResponseEntity<String> insertMaintenanceSchedule(@RequestBody @Valid CreateMaintenanceSchedule createMaintenanceSchedule){
-        try{
-            return ResponseEntity.ok(maintenanceScheduleService.insertScheduleService(createMaintenanceSchedule));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: "+ e.getMessage());
-        }
+        return ResponseEntity.ok(maintenanceScheduleService.insertSchedule(createMaintenanceSchedule));
     }
 
 
     @PutMapping("/{vehicleId}/{id}")
     public ResponseEntity<String> updateMaintenanceById(@PathVariable Long vehicleId, @PathVariable Long id, @RequestBody UpdateVehicleMaintenanceSchedule updateVehicleMaintenanceSchedule){
-        try{
-            return ResponseEntity.ok(maintenanceScheduleService.updateScheduleService(vehicleId, id, updateVehicleMaintenanceSchedule));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-        }
+        return ResponseEntity.ok(maintenanceScheduleService.updateSchedule(vehicleId, id, updateVehicleMaintenanceSchedule));
     }
 
     //testing is not done for this, having issues
     @DeleteMapping("/{vehicleId}/{id}")
-    public ResponseEntity<?> deleteMaintenanceById(@PathVariable Long vehicleId, @PathVariable Long id){
-        try{
-            return ResponseEntity.ok(maintenanceScheduleService.deleteScheduleByVehicleIdService(vehicleId, id));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+    public ResponseEntity<?> deleteMaintenanceByBothId(@PathVariable Long vehicleId, @PathVariable Long id){
+        return ResponseEntity.ok(maintenanceScheduleService.deleteScheduleByVehicleId(vehicleId, id));
+    }
 
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?>deleteScheduleById(@PathVariable Long id){
+        return ResponseEntity.ok(maintenanceScheduleService.deleteScheduleById(id));
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getMaintenanceScheduleById(@PathVariable Long id) {
-        try{
-            return ResponseEntity.ok(maintenanceScheduleService.getScheduleByIdService(id));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-
-        }
+        return ResponseEntity.ok(maintenanceScheduleService.getScheduleById(id));
     }
 
     @GetMapping("/get-by-vehicleId/{vehicleId}")
     public ResponseEntity<?> getSchedulesByVehicle(@PathVariable Long vehicleId) {
-        try{
-            return ResponseEntity.ok(maintenanceScheduleService.getByVehicleIdService(vehicleId));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-        }
+        return ResponseEntity.ok(maintenanceScheduleService.getByVehicleId(vehicleId));
     }
 }

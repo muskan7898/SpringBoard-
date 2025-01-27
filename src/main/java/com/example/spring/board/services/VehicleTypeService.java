@@ -6,7 +6,6 @@ import com.example.spring.board.services.core.VehicleTypeCoreService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,7 +19,7 @@ import java.util.Objects;
 public class VehicleTypeService {
     private final VehicleTypeCoreService vehicleTypeCoreService;
 
-    public String insertVehicleTypeService(@RequestBody VehicleTypeDetail vehicleTypeDetail){
+    public String insertVehicleType(@RequestBody VehicleTypeDetail vehicleTypeDetail){
         VehicleType vehicleType = VehicleType.builder()
                                     .typeName(vehicleTypeDetail.getType())
                                     .build();
@@ -29,27 +28,37 @@ public class VehicleTypeService {
         return savedVehicleType.getId().toString();
     }
 
-    public VehicleTypeDetail getVehicleByIdService(Long id){
-        VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(id);
-
-        return new VehicleTypeDetail(
-                vehicleType.getId(),
-                vehicleType.getTypeName()
-        );
-    }
-
-
-    public VehicleType deleteVehicleTypeByIdService(Long id){
-        VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(id);
-
-        if(Objects.isNull(vehicleType)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle type not found for this id: "+ id);
+    public VehicleTypeDetail getVehicleById(Long id){
+        try {
+            VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(id);
+            if(vehicleType == null){
+                throw new EntityNotFoundException("vehicle type not found for this id: "+ id);
+            }
+            return new VehicleTypeDetail(
+                    vehicleType.getId(),
+                    vehicleType.getTypeName()
+            );
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-        vehicleTypeCoreService.deleteVehicleTypeById(id);
-        return vehicleType;
     }
 
-    public List<VehicleTypeDetail> getAllVehicleTypeService(){
+
+    public VehicleType deleteVehicleTypeById(Long id){
+        try {
+            VehicleType vehicleType = vehicleTypeCoreService.getVehicleTypeById(id);
+
+            if(Objects.isNull(vehicleType)){
+                throw new EntityNotFoundException("vehicle-type is not found id: "+ id);
+            }
+            vehicleTypeCoreService.deleteVehicleTypeById(id);
+            return vehicleType;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    public List<VehicleTypeDetail> getAllVehicleType(){
         List<VehicleType> vehicleTypes = vehicleTypeCoreService.getAllVehicleTypes();
         List<VehicleTypeDetail> vehicleTypeDetails = new ArrayList<>();
 

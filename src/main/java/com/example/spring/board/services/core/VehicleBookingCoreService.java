@@ -12,19 +12,7 @@ public class VehicleBookingCoreService {
     private final VehicleBookingRepository vehicleBookingRepository;
 
     public VehicleBooking saveVehicleBooking(VehicleBooking vehicleBooking){
-        try {
-            return vehicleBookingRepository.save(vehicleBooking);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public VehicleBooking getVehicleBookingByVehicleId(Long id){
-        try {
-            return vehicleBookingRepository.getByVehicleId(id);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return vehicleBookingRepository.save(vehicleBooking);
     }
 }
 

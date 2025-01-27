@@ -33,22 +33,10 @@ public class VehicleTypeCoreService {
     }
 
     public VehicleType getVehicleTypeById(Long id){
-        try{
-            return vehicleTypeRepository.findById(id).orElse(null);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return vehicleTypeRepository.findById(id).orElse(null);
     }
 
     public void deleteVehicleTypeById(Long id){
-        try {
-            VehicleType vehicleType =  vehicleTypeRepository.findById(id).orElse(null);
-            if(vehicleType == null){
-                throw new EntityNotFoundException("VehicleType not found for id: " + id);
-            }
-            vehicleTypeRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        vehicleTypeRepository.deleteById(id);
     }
 }

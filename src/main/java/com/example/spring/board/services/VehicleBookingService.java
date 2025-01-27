@@ -7,13 +7,11 @@ import com.example.spring.board.model.VehicleBooking;
 import com.example.spring.board.services.core.BookingCoreService;
 import com.example.spring.board.services.core.VehicleBookingCoreService;
 import com.example.spring.board.services.core.VehicleCoreService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 
 import java.util.Objects;
 
@@ -25,26 +23,30 @@ public class VehicleBookingService {
     private final VehicleCoreService vehicleCoreService;
     private final BookingCoreService bookingCoreService;
 
-    public String insertVehicleBookingService(VehicleBookingDetail vehicleBookingDetail){
-        Long vehicleId = vehicleBookingDetail.getVehicleId();
-        Long bookingId = vehicleBookingDetail.getBookingId();
+    public String insertVehicleBooking(VehicleBookingDetail vehicleBookingDetail) {
+        try {
+            Long vehicleId = vehicleBookingDetail.getVehicleId();
+            Vehicle vehicle = vehicleCoreService.getVehicleById(vehicleId);
+            if(Objects.isNull(vehicle)){
+                throw new EntityNotFoundException("vehicle not found for this id: " + vehicleId);
+            }
+            Long bookingId = vehicleBookingDetail.getBookingId();
+            Booking booking = bookingCoreService.getBookingById(bookingId);
+            if(Objects.isNull(booking)){
+                throw new EntityNotFoundException("booking not found for this id: " + bookingId);
+            }
 
-        Vehicle vehicle = vehicleCoreService.getVehicleById(vehicleId);
-        if(Objects.isNull(vehicle)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle not exist for this id: " + vehicleId);
+            VehicleBooking vehicleBooking = VehicleBooking.builder()
+                    .vehicleId(vehicleId)
+                    .bookingId(bookingId)
+                    .build();
+
+            VehicleBooking savedVehicleBooking = vehicleBookingCoreService.saveVehicleBooking(vehicleBooking);
+            System.out.println(savedVehicleBooking);
+            return "";
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
-        Booking booking = bookingCoreService.getBookingById(bookingId);
-        if(Objects.isNull(booking)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "booking does not exists for this id: "+ bookingId);
-        }
-
-        VehicleBooking vehicleBooking = VehicleBooking.builder()
-                .bookingId(vehicleBookingDetail.getBookingId())
-                .vehicleId(vehicleBookingDetail.getVehicleId())
-                .build();
-
-        VehicleBooking savedVehicleBooking = vehicleBookingCoreService.saveVehicleBooking(vehicleBooking);
-        return savedVehicleBooking.getBookingId().toString();
     }
 }
+

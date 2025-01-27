@@ -19,10 +19,6 @@ public class VehicleBookingController {
     private final VehicleBookingService vehicleBookingService;
     @PostMapping()
     public ResponseEntity<String> insertVehicleBooking(@RequestBody @Valid VehicleBookingDetail vehicleBookingDetail){
-        try{
-            return ResponseEntity.ok(vehicleBookingService.insertVehicleBookingService(vehicleBookingDetail));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-        }
+            return ResponseEntity.ok(vehicleBookingService.insertVehicleBooking(vehicleBookingDetail));
     }
 }

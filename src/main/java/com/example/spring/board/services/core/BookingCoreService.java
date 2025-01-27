@@ -25,6 +25,7 @@ public class BookingCoreService {
         return bookingRepository.findAll();
     }
 
+
     /*
         * class A {}
         class B extends A {}
