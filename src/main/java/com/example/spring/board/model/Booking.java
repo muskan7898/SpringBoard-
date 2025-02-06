@@ -25,5 +25,5 @@ public class Booking {
     private Date startDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date updatedDate;
+    private Date endDate;
 }

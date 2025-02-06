@@ -1,47 +1,41 @@
 package com.example.spring.board.controller;
 
 
-import com.example.spring.board.dto.res.BookingDetail;
+import com.example.spring.board.dto.req.CreateBookingRequest;
 import com.example.spring.board.services.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/booking")
+
 public class BookingController {
-    private BookingService bookingService;
+    private final BookingService bookingService;
 
-    @PostMapping("/create")
-    public String insertBooking(@RequestBody @Valid BookingDetail bookingDetail){
-        return "";
+    @PostMapping
+    public ResponseEntity<String> insertBooking(@RequestBody @Valid CreateBookingRequest createBookingRequest) {
+        return ResponseEntity.ok(bookingService.insertBooking(createBookingRequest));
     }
 
-    @GetMapping("/get-all")
-    public ResponseEntity<List<BookingDetail>> getAllBooking(){
-        return null;
+    @GetMapping
+    public ResponseEntity<?> getAllBooking() {
+        return ResponseEntity.ok(bookingService.getAllBookings());
     }
-
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookingDetail> getBookingById(@PathVariable Long id) {
-        return null;
+    public ResponseEntity<?> getBookingById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookingService.getBookingById(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
-        return null;
+    public ResponseEntity<?> deleteBooking(@PathVariable Long id) {
+        return ResponseEntity.ok(bookingService.deleteBookingById(id));
     }
-
-    @GetMapping("/by-vehicle/{vehicleId}")
-    public List<BookingDetail> getBookingsByVehicle(@PathVariable Long vehicleId) {
-        return null;
-    }
-
 }
