@@ -24,6 +24,7 @@ public class VehicleCoreService {
         }
     }
 
+
     public List<Vehicle> getAllVehicle(){
         try{
             return vehicleRepository.findAll();
