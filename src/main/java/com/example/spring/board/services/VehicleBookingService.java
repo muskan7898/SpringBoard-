@@ -1,9 +1,11 @@
 package com.example.spring.board.services;
 
 import com.example.spring.board.dto.res.VehicleBookingDetail;
+import com.example.spring.board.dto.res.VehicleBookingResponse;
 import com.example.spring.board.model.Booking;
 import com.example.spring.board.model.Vehicle;
 import com.example.spring.board.model.VehicleBooking;
+import com.example.spring.board.repository.VehicleBookingRepository;
 import com.example.spring.board.services.core.BookingCoreService;
 import com.example.spring.board.services.core.VehicleBookingCoreService;
 import com.example.spring.board.services.core.VehicleCoreService;
@@ -22,6 +24,7 @@ public class VehicleBookingService {
     private final VehicleBookingCoreService vehicleBookingCoreService;
     private final VehicleCoreService vehicleCoreService;
     private final BookingCoreService bookingCoreService;
+    private final VehicleBookingRepository vehicleBookingRepository;
 
     public String insertVehicleBooking(VehicleBookingDetail vehicleBookingDetail) {
         try {
@@ -48,5 +51,7 @@ public class VehicleBookingService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+
 }
 
