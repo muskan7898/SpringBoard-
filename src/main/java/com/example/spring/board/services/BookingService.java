@@ -2,8 +2,11 @@ package com.example.spring.board.services;
 
 import com.example.spring.board.dto.req.CreateBookingRequest;
 import com.example.spring.board.dto.res.BookingDetail;
+import com.example.spring.board.enums.UtilsType;
 import com.example.spring.board.model.Booking;
+import com.example.spring.board.repository.BookingRepository;
 import com.example.spring.board.services.core.BookingCoreService;
+import com.example.spring.board.services.provider.UtilsProvider;
 import com.example.spring.board.utils.Mappers;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +20,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingService {
     private final BookingCoreService bookingCoreService;
+    private final UtilsProvider utilsProvider;
 
     public String insertBooking(CreateBookingRequest createBookingRequest){
         Booking booking = Booking.builder()
                 .startDate(createBookingRequest.getStartDate())
                 .endDate(createBookingRequest.getEndDate())
                 .build();
+
+        utilsProvider.getUtilsInterface(UtilsType.NUMBER_UTILS).perform();
 
         Booking savedBooking = bookingCoreService.saveBooking(booking);
         return savedBooking.getId().toString();
